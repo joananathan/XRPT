@@ -29,9 +29,9 @@ body {
 
 @keyframes typing {
   0% {content: ""}
-  50% { content: "X"}
-  55% {content: "XR"}
-  75% {content: "XRP"}
+  20% { content: "X"}
+  45% {content: "XR"}
+  90% {content: "XRP"}
   100% {content: "XRPT"}
 }
 
@@ -41,11 +41,12 @@ body {
     color: #fff;
     font-family: 'Gasoek One';
     --caret: white;
+    animation-delay: 3s;
 }
 
 .logo::before{  
   content:"";
-  animation: typing 2.4s forwards;
+  animation: typing 1.5s forwards;
 }
 
 @keyframes blink {
