@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static\style.css">
+    <title>Page</title>
+  </head>
+  <body>
+      <div class="frame">
+        <div class="text">
+          <div class="logo"></div>
+          <div class="description">
+            <p>Concise, impactful clips optimised for engagement.</p>
+            <p class="subtext">Transform long videos into engaging short form content, with customisations every step of the way.</p>
+          </div>
+        </div>
+        <div class="videos">
+          <div class="slider-container">
+            <input type="radio" name="slider" id="item-1" checked>
+            <input type="radio" name="slider" id="item-2">
+            <input type="radio" name="slider" id="item-3">
+            <div class="cards">
+              <label class="card" for="item-1" id="song-1">
+                <video autoplay loop muted>
+                  <source src="static\assets\video.mp4" type="video/mp4">
+                </video>
+              </label>
+              <label class="card" for="item-2" id="song-2">
+                <video autoplay loop muted>
+                  <source src="static\assets\video.mp4" type="video/mp4">
+                </video>
+              </label>
+              <label class="card" for="item-3" id="song-3">
+                <video autoplay loop muted>
+                  <source src="static\assets\video.mp4" type="video/mp4">
+                </video>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    <script src="static\scripts.js"></script>
+  </body>
+</html>
