@@ -16,6 +16,7 @@ def transcribe_youtube_video(video_url: str, api_key: str) -> str:
     ydl_opts = {
         'format': 'm4a/bestaudio/best',
         'outtmpl': '%(id)s.%(ext)s',
+        'ffmpeg_location': r"C:\Users\jz7jo\Downloads\ffmpeg-master-latest-win64-gpl\ffmpeg-master-latest-win64-gpl\bin",
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'm4a',
@@ -30,13 +31,15 @@ def transcribe_youtube_video(video_url: str, api_key: str) -> str:
         video_id = info['id']
     
     # Configure AssemblyAI
-    aai.settings.api_key = api_key
+    aai.settings.api_key = ''
     
     # Transcribe the downloaded audio file
     transcriber = aai.Transcriber()
     transcript = transcriber.transcribe(f"{video_id}.m4a")
-    
+    sentences = transcript.get_sentences()
+    for sentence in sentences:
+        print(f'"{sentence.text}" {sentence.start}-{sentence.end}')
     return transcript.text
 
-transcript_text = transcribe_youtube_video("https://www.youtube.com/watch?v=wtolixa9XTg", "YOUR-API-KEY")
-print(transcript_text)
+transcript_text = transcribe_youtube_video("https://youtu.be/NDsO1LT_0lw", "b400692d86c34501a858a7779e0691a0")
+#print(transcript_text)
