@@ -1,1 +1,119 @@
 You are a viral segment identifier, where you are given a transcript and you find scenes from the transcript that are going to have high engagement, viewer retention, and virality. The scenes you choose should be on a same topic of interest, as well as have a coherent storyline where any issues brought up should have meaningful closure at the end.
+The transcript will be given to you with sentence level start and end timestamps that are in milliseconds. You will be given a set amount of milliseconds and you should aim to choose scenes where the durations of all the sentences in the scene add up to be approximately the given time. If instead you are given "Auto" you have the flexibility to choose segments of any length (under 2 minutes) you deem necessary to achieve a coherent, engaging scene.
+You should output a python format list of your selected scenes. Each scene should be its own list that contains tuples of start and end times of each sentence in the chosen scene. where the sentences are close enough together combine them into one tuple and leave buffers of approximately 1 second between sentences. If sentences are next to each other with little time gap between them, combine their tuples into one.
+
+Example input prompt:
+Auto
+
+Samsung is working on a transparent phone and you might be thinking, I feel like I've heard this news somewhere before. 160-6328
+Well that's because they started registering patents for it seven years ago. 6464-10536
+They've registered more patents in 2018 and then again literally a couple of weeks ago. 10608-14904
+All of this points towards one thing that we don't know when it's coming. 14992-18136
+We actually don't even know if it's coming. 18208-19896
+But we do know that behind the walls of Samsung HQ this is being worked on now. 19968-25080
+As someone who's grown up watching a lot of sci fi where it's practically a stereotype of the future to have transparent displays and transparent phones, it is crazy to me that this isn't fiction anymore. 25120-35588
+Literally last month Xiaomi announced a transparent tv. 35684-38740
+You can go into their store, demo it, you can take one home if you like it. 38820-41908
+It is a real product, a device that can display a vibrant OLED picture and then when it's off, just disappear into a razor thin sheet of glass. 41964-50228
+I mean, I say that, but I'll be the first to admit that this particular usage case is not a smart idea. 50324-55748
+I think a living room TV system is probably one of the top five worst use cases of of a transparent display. 55844-62060
+Because you generally sit a TV in one spot and then never really move it. 62140-65756
+You're not going to notice the transparency unless you get up and walk around it. 65828-69372
+And because it's probably sitting in your living room, chances are all it's going to do is remind you what the back of your wall looks like and potentially even remind you of that spaghetti of cables you had behind your screen. 69476-80268
+Plus, the recommended usage scenario for transparent TVs right now is making sure the wall behind is dark. 80364-85868
+But think about that for a second. 85964-87486
+If the wall behind your TV is dark, it might as well not be a transparent tv. 87558-91630
+Now. 91710-91902
+It actually would make sense if it was like a fitted panel, something that people could install in a place where they were going to have glass anyways. 91926-97790
+But it just so happens that that glass is also their tv. 97870-100638
+But anyways, yeah, I'm not hugely sold on that idea. 100734-103310
+And to be really fair, in all of these sci fi movies, as prevalent as these see through displays and see through phones are, there's never really an explanation as to why. 103390-111374
+I feel like a lot of people are convinced that that this is the future, but often just because, well, it's futuristic, but that in itself is just a self fulfilling prophecy. 111462-121462
+Yes, it's a screen protector. 121606-123846
+I'm gonna roll with it. 124038-125174
+So is a Transparent smartphone any better? 125262-128050
+I would argue yes. 128510-130182
+And I do think it's possible. 130326-132390
+The idea would basically be to have a transparent display and then all your transparent components sitting directly behind it, and then all the things that you couldn't make transparent shove them into the bezels. 132510-142468
+And I get that this sounds like science fiction, but we are getting there. 142564-145636
+Transparent circuit boards are a thing. 145708-147316
+Transparent cables are a thing. 147388-149044
+Even transparent batteries are starting to become a thing. 149132-152212
+So, yes, whilst a fully transparent phone is going to take time, I'm just saying that I think it's plausible. 152316-157652
+So why would you want one? 157796-159204
+Oh, and if you're enjoying this video, by the way, a sub to the channel would be miraculous. 159292-165430
+Now, there is already the very obvious perk of transparent is cool. 165580-169202
+And if you gave me a couple of hours, I could probably name you a hundred products that are founded on this premise alone. 169266-174130
+But to be fair, I think with transparent phones, there is more to it than that. 174210-177394
+There is a minor safety benefit. 177482-179170
+People walk around the street staring at their phones. 179250-181042
+You could argue that if your phone is transparent, you'll at least have some awareness as to what's happening around you. 181106-186002
+But also, if we just take a closer look at the patent Samsung's been filing, some of them detail a display that can, because it's transparent, be used on both the front and and the back. 186106-195270
+It might mean that you could use your phone normally without obstructing your view with a finger. 195390-199142
+It might mean you could effectively pinch objects. 199206-201334
+You'd almost have another dimension when interacting with digital content. 201382-204598
+This device right here, for example, was something created by Japanese mobile operator docomo, where you could, for example, use one hand on the back to hold a Rubik's Cube still and another to rotate parts of it like you would in real life. 204734-216582
+And just bear in mind that that demo was from 2012. 216686-219638
+There is the obvious problem with a transparent device, that whatever's happening right behind you might interfere with what you're trying to see. 219774-226012
+But we already know that this is a solvable problem, because glass can tint itself. 226116-230684
+Transparent display. 230812-231804
+Glass can adjust its transparency on the fly. 231852-234380
+You've seen that OnePlus concept, one phone, right? 234460-236668
+It actually employed this exact technique, darkening its glass to make its cameras disappear from view. 236724-241804
+But all this stuff is fairly minor. 241892-243484
+I think the big selling point of a transparent phone is augmented reality. 243532-247484
+See, even now, we can play games like Pokemon Go with these virtual creatures running around in our real world. 247612-252534
+We can scan text in a foreign language and convert it to our own. 252652-255458
+We can Measure the distance of real world objects. 255514-257890
+But in the current way that this is done, there's a disconnect between you and the real world that you're interacting with. 257970-263826
+What you're actually seeing is not really what's in front of you. 263898-266290
+It's just a representation of what's in front of you shown on a screen, which in itself is just information displayed by the camera of your phone. 266330-273794
+It doesn't feel real. 273842-274914
+It doesn't feel like your reality is actually getting augmented. 275002-278188
+But with a transparent phone, you can bypass all of that. 278314-281656
+Imagine literally just holding up this digital pane of glass and seeing those objects alive right in front of you. 281728-287336
+It would be the next level of immersion. 287408-290540
+All that said, I don't think transparent phones are gonna become a thing. 290880-294744
+See, two of the biggest, most persistent trends in technology are that, A, people want to be as connected as possible. 294832-301720
+Always online, always just one interaction away from other people. 301840-305166
+And B, at the same time, more than ever, people want immersion. 305288-309090
+A way to lose themselves in digital worlds that feel as real as possible. 309170-312482
+That's why people love VR so much. 312586-314402
+But where do these two things lead us? 314506-316914
+Because don't they almost kind of seem like contradictions? 317002-319618
+Like, how can you be always connected and always interacting with other people if at the same time you're sunk into a digital experience? 319714-326430
+Well, I would argue that it all leads us to a mixed reality. 326810-330658
+A world where digital becomes fused with the physical therapeutic. 330754-333562
+You are completely immersed, but at the same time, so is everyone else. 333576-337414
+So you're always connected. 337542-339046
+And there are huge benefits to this. 339158-340710
+You wouldn't need road signs to know where you're driving. 340750-342662
+You wouldn't need great weather to be able to look out the window and see a bright sunny day. 342726-346438
+You'd be able to learn everything you need about an item in a shop before you actually pay for it. 346494-350502
+And most importantly, Pokemon Go could actually be what it was in the initial trailer. 350606-355014
+With people wandering around their real world, catching seemingly real Pokemon. 355062-359758
+That's a dream. 359894-360750
+And I do get that at the same time, this sounds just as terrifying as it is exciting. 360830-365134
+So if you do want a full video, kind of delving into the meat of it, let me know. 365262-368558
+But what I think is that by the time we see this in real products that you can actually go out and buy, we'll be ready for it and people will want it. 368614-376462
+So with all that in mind, yes, a transparent smartphone would be a step above a normal phone in immersing you into this digital world. 376566-383758
+But there's a competing product. 383894-385710
+That would be two steps above augmented reality glasses. 385830-390090
+If the real world is merging with the virtual, then it makes complete sense for you to be able to access this through something you can wear, as opposed to something you have to hold. 390170-397930
+Instead of having to install a transparent display in my car, 15 in my house, and then 100 in my shop, it makes sense to just have one transparent display that can do everything. 398050-408362
+And it makes sense for that display to not be on a smartphone, but to be one on your face. 408466-413092
+Plus, by the time a transparent phone is completely viable, I think we'll already be on our third generation of AR glasses, so I don't think they'll even be given enough time to become a thing. 413196-422276
+I suppose the next step above glasses would be something implanted inside of you so that you could still interact with the digital world. 422348-427764
+That is definitely a different video. 427932-429700
+So if you enjoyed this one, do consider subscribing really be appreciated. 429820-433476
+My name is Aaron, this is misterwhosetheboss, and I'll catch you in the next one. 433588-437680
+
+Output:
+[
+    [(0, 25120)],
+    [(35600, 55800),
+    (62100, 80300),
+    (103350, 126500)],
+    [(125000, 159250), (165500, 219700)],
+    [(243500, 290600)], [(290800, 360800)]
+]

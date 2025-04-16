@@ -3,13 +3,12 @@
 
 @font-face {
     font-family: 'Lausanne';
-    src: url('assets\\Lausanne-Regular.woff2') format('woff2');
+    src: url('\assets\Lausanne-Regular.otf') format('otf');
 }
 
 html, body {
     margin: 0;
-    height: 100%;
-    overflow: hidden;
+    scroll-behavior: smooth;
 }
 
 body {
@@ -21,8 +20,12 @@ body {
     background-size: cover;
 }
 
+section {
+  width: 100vw;
+  height: 100vh;
+}
+
 .inset {
-  position: absolute; 
   background-color: rgb(70, 70, 70);
   padding: 10px;
 }
@@ -68,6 +71,7 @@ body {
     height: 100%;
     padding: 0 5%;
 }
+
 @keyframes slideInFromLeft {
   0% {
     transform: translateX(-100%);
@@ -156,7 +160,7 @@ body {
 
 .videos:hover {
   transform: scale(1.2);
-  opacity: 1;
+  opacity: 0.9;
 }
 
 .videos:hover::before {
@@ -174,10 +178,10 @@ input[type=radio] {
 }
 
 .slider-container {
-  width: 100%;
+  width: 100vw;
   max-width: 800px;
   max-height: 600px;
-  height: 100%;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -196,7 +200,7 @@ input[type=radio] {
 .card {
   position: absolute;
   width: 60%;
-  height: 100%;
+  height: 100vh;
   left: 0;
   right: 0;
   margin: auto;
@@ -209,8 +213,8 @@ input[type=radio] {
 
 
 video {
-  width: 100%;
-  height: 100%; 
+  width: 100vw;
+  height: 100vh; 
   object-fit: cover;
   border-radius: 7px;
   display: block;
