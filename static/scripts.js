@@ -39,4 +39,20 @@ document.addEventListener('DOMContentLoaded', function () {
   rotateCarousel();
 });
 
+// Give scroll down arrow a bounce animation after it initially fades in
+document.addEventListener('DOMContentLoaded', () => {
+  const arrow = document.querySelector('.scroll-arrow');
 
+  arrow.addEventListener('animationend', () => {
+    arrow.style.animation = 'bounce 1.8s infinite';
+  });
+});
+
+
+new fullScroll({
+  mainElement: "main",
+  displayDots: true,
+  dotsPosition: "left",
+  animateTime: 0.8,
+  animateFunction: "ease-in-out",
+});

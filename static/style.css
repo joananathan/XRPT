@@ -1,14 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Gasoek+One&display=swap');
 @import url("https://fonts.googleapis.com/css?family=DM+Sans:400,500,700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Sulphur+Point:wght@300;400;700&display=swap');
 
 @font-face {
     font-family: 'Lausanne';
-    src: url('\assets\Lausanne-Regular.otf') format('otf');
+    src: url('assets\\Lausanne-Regular.woff2') format('woff2');
 }
 
 html, body {
     margin: 0;
     scroll-behavior: smooth;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 body {
@@ -82,13 +85,12 @@ section {
 }
 
 .text {
-    margin-top: 2%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     font-family: "Lausanne";
-    font-weight: 500;
-    font-size: 1.5vw;
+    font-weight: 500;   
+    font-size: 1.3vw;
     color: #ffffff;
     max-width: 50%;
     padding: 0;
@@ -213,34 +215,109 @@ input[type=radio] {
 
 
 video {
-  width: 100vw;
-  height: 100vh; 
+  width: 20vw;
+  height: 65vh; 
   object-fit: cover;
   border-radius: 7px;
   display: block;
 }
 
 
-#item-1:checked ~ .cards #song-1,
-#item-2:checked ~ .cards #song-2,
-#item-3:checked ~ .cards #song-3 {
+#item-1:checked ~ .cards #video-1,
+#item-2:checked ~ .cards #video-2,
+#item-3:checked ~ .cards #video-3 {
   transform: translateX(0) scale(1);
   opacity: 1;
   z-index: 1;
 }
 
-#item-1:checked ~ .cards #song-2,
-#item-2:checked ~ .cards #song-3,
-#item-3:checked ~ .cards #song-1 {
+#item-1:checked ~ .cards #video-2,
+#item-2:checked ~ .cards #video-3,
+#item-3:checked ~ .cards #video-1 {
   transform: translateX(30%) scale(0.75);
   opacity: 0.5;
   z-index: 0;
 }
 
-#item-1:checked ~ .cards #song-3,
-#item-2:checked ~ .cards #song-1,
-#item-3:checked ~ .cards #song-2 {
+#item-1:checked ~ .cards #video-3,
+#item-2:checked ~ .cards #video-1,
+#item-3:checked ~ .cards #video-2 {
   transform: translateX(-30%) scale(0.75);
   opacity: 0.5;
   z-index: 0;
+}
+
+.title {
+  color: white;
+  font-family: Sulphur Point;
+  font-size: 3.5rem;
+  letter-spacing: .3rem;
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-30px);
+  }
+  to {
+    opacity: 0.55;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    opacity: 0.55;
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    opacity: 0.55;
+    transform: translateX(-50%) translateY(-9px);
+  }
+}
+.scroll-arrow {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2.5rem;
+  color: rgba(255, 255, 255, 0.734);
+  opacity: 0;
+  animation: slideInFromTop 1s ease-out forwards;
+  animation-delay: 3s;
+  z-index: 10;
+  cursor: pointer;
+}
+
+
+.section2 {
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.864);
+  background-blend-mode: lighten;
+  padding: 3%;
+}
+
+
+.options{
+  font-family: Sulphur Point;
+  color: white;
+  font-size: 2.5rem;
+}
+
+.flash-message {
+  padding: 0.3em;
+  font-family: Sulphur Point;
+  font-size: 1.5rem;
+}
+
+.flash-message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.flash-message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
 }
