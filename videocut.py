@@ -6,7 +6,7 @@ from datetime import timedelta
 
 def segment(inputfile, start_time, end_time, outputfile): 
     cmd = [
-        "ffmpeg",
+        "bin\\ffmpeg.exe",
         "-ss", str(timedelta(milliseconds=start_time)),
         "-to", str(timedelta(milliseconds=end_time)),
         "-i", inputfile,
@@ -32,7 +32,7 @@ def cut_and_combine(video_path, sections, output_path):
     #     os.remove(temp_file)
     
 
-video_file = "NDsO1LT_0lw.webm"
+video_file = "NDsO1LT_0lw.mp4"
 # timestamps = [
 #     [(320, 27944), (28032, 30216), (30288, 46372), (46516, 58660), (58700, 93504)],
 #     [(93552, 103708), (106140, 129100), (129600, 147400)],

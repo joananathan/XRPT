@@ -64,16 +64,16 @@
 
 
         <form method="POST" enctype="multipart/form-data">
-            <label for="video_file" class="options">Upload Video File:</label><br>
-            <input type="file" name="video_file"><br><br>
-
-            <label for="youtube_url" class="options">Or paste YouTube URL:</label><br>
-            <input type="text" name="youtube_url" placeholder="https://www.youtube.com/watch?v=..."><br><br>
-
-            <label for="clip_length" class="options">Clip Length (seconds):</label><br>
+            <label for="video_file" class="options">Upload video OR enter Youtube link:</label><br>
+            <input type="text" name="youtube_url" placeholder="Youtube link"><br>
+            <input type="file" name="file" id="file" class="inputfile" accept="video/*"/>
+            <label for="file"><span>Choose your video</span></label>
+            <br><br>
+            
+            <label for="clip_length" class="options">Clip length (seconds):</label><br>
             <input type="number" name="clip_length" value="60" min="1"><br><br>
 
-            <label for="caption_style" class="options">Caption Style:</label><br>
+            <label for="caption_style" class="options">Caption style:</label><br>
             <select name="caption_style">
                 <option value="default">Default</option>
                 <option value="bold">Bold</option>

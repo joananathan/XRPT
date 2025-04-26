@@ -56,3 +56,21 @@ new fullScroll({
   animateTime: 0.8,
   animateFunction: "ease-in-out",
 });
+
+//File input handling
+const input = document.getElementById('file');
+const label = input.nextElementSibling;
+const span = label.querySelector('span');
+const labelVal = span.innerHTML;
+
+input.addEventListener('change', function (e) {
+  let fileName = '';
+  if (this.files && this.files.length > 1) {
+    fileName = `${this.files.length} files selected`;
+  } else if (this.files.length === 1) {
+    fileName = this.files[0].name;
+  }
+
+  span.innerHTML = fileName ? fileName : labelVal;
+});
+

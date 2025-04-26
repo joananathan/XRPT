@@ -146,7 +146,6 @@ section {
     margin: auto -15%;
     border-radius: 5px;
     transition: 0.5s ease;
-    opacity: 80%;
 }
 
 .videos::before{
@@ -292,7 +291,7 @@ video {
 
 .section2 {
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.864);
+  background-color: rgba(0, 0, 0, 0.712);
   background-blend-mode: lighten;
   padding: 3%;
 }
@@ -300,8 +299,12 @@ video {
 
 .options{
   font-family: Sulphur Point;
-  color: white;
-  font-size: 2.5rem;
+  color: rgba(255, 255, 255, 0.899);
+  font-size: 2rem;
+}
+
+form {
+  padding-left: 1vw;
 }
 
 .flash-message {
@@ -320,4 +323,77 @@ video {
   background-color: #f8d7da;
   color: #721c24;
   border: 1px solid #f5c6cb;
+}
+
+
+input[type="text"] {
+  width: 30%;
+  padding: 0.4rem;
+  font-family: Lausanne;
+  font-size: 1rem;
+  background-color: #aaaaaa3c;
+  border: 2px solid #717171;
+  border-radius: 6px;
+  transition: 0.25s ease;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus {
+  background-color: #d8d8d8;
+  border-color: #7b7b7b;
+  outline: none;
+}
+
+input::placeholder {
+  color: #7b7b7b;
+  font-style: italic;
+}
+
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.inputfile + label {
+  font-size: 1em;
+  font-family: Sulphur Point;
+  color: #a0a0a0;
+  background-color: #5a5a5a3c;
+  border: 2px solid #717171;
+  display: inline-block;
+  padding: 5px 10px;
+  margin-top: 10px;;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  max-width: 25vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+  background-color: #d8d8d8;
+  border-color: #7b7b7b;
+  color:rgba(0, 0, 0, 0.856);
+}
+
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
 }

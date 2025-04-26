@@ -16,7 +16,7 @@ def transcribe_youtube_video(video_url: str, api_key: str) -> str:
     ydl_opts = {
         'format': 'bestvideo+bestaudio/best',
         'outtmpl': '%(id)s.%(ext)s',
-        'ffmpeg_location': r"C:\Users\jz7jo\Downloads\ffmpeg-master-latest-win64-gpl\ffmpeg-master-latest-win64-gpl\bin",
+        'ffmpeg_location': "bin",
         'postprocessors': [{
             'key': 'FFmpegVideoRemuxer',
         }]
