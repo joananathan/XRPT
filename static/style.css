@@ -307,6 +307,18 @@ form {
   padding-left: 1vw;
 }
 
+.form-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px; /* spacing between columns */
+}
+
+.form-left,
+.form-right {
+  flex: 1 1 45%;
+  min-width: 300px;
+}
+
 .flash-message {
   padding: 0.3em;
   font-family: Sulphur Point;
@@ -399,7 +411,7 @@ button:hover {
 }
 
 .dropdown {
-  padding: 0.2rem 2rem; 
+  padding: 0.4rem 2rem; 
   background-color: #5a58587f;
   color: rgba(244, 241, 241, 0.608);
   border-radius: 7px;
@@ -410,4 +422,21 @@ button:hover {
 }
 option {
   background-color: #5a5858ba;
+}
+
+
+.images{
+  padding: 1rem 2.5rem;
+}
+
+.images img {
+  border-radius: 15px;
+  display: none;
+}
+
+.images[data-selected="1"] img[data-image="1"],
+.images[data-selected="2"] img[data-image="2"],
+.images[data-selected="3"] img[data-image="3"],
+.images[data-selected="4"] img[data-image="4"] {
+  display: block;
 }

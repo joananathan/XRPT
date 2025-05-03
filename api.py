@@ -1,26 +1,19 @@
-"""Run this model in Python
+from groq import Groq
 
-> pip install azure-ai-inference
-"""
-import os
-from azure.ai.inference import ChatCompletionsClient
-from azure.ai.inference.models import SystemMessage
-from azure.ai.inference.models import UserMessage
-from azure.core.credentials import AzureKeyCredential
-
-# To authenticate with the model you will need to generate a personal access token (PAT) in your GitHub settings. 
-# Create your PAT token by following instructions here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
-client = ChatCompletionsClient(
-    endpoint="https://models.inference.ai.azure.com",
-    credential=AzureKeyCredential('1.'),
+client = Groq()
+completion = client.chat.completions.create(
+    model="llama-3.3-70b-versatile",
+    messages=[],
+    temperature=1,
+    max_completion_tokens=1024,
+    top_p=1,
+    stream=True,
+    stop=None,
 )
-with open("prompt.txt", "r") as file:
-    system_message = file.read()
-    
-response = client.complete(
-    messages=[
-        SystemMessage(system_message),
-        UserMessage(
+
+for chunk in completion:
+    print(chunk.choices[0].delta.content or "", end="")
+
 """30000
 
 I somehow have unrestricted access to all of the great pyramids of Egypt. 320-5768

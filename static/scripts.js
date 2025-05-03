@@ -74,3 +74,13 @@ input.addEventListener('change', function (e) {
   span.innerHTML = fileName ? fileName : labelVal;
 });
 
+
+//Changing caption image based on selection
+const selectbox = document.getElementById("selectbox");
+const imagecontainer = document.querySelector(".images");
+
+imagecontainer.dataset.selected = selectbox.value;  // ensures correct image shows on load
+
+selectbox.addEventListener("change", () => {
+  imagecontainer.dataset.selected = selectbox.value;
+});

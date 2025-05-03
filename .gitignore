@@ -1,0 +1,15 @@
+*.pyc
+**/__pycache__/
+
+
+*.wav
+*.mp3
+*.gif
+*.mp4
+*.webm
+
+*.exe
+
+venv/
+
+.env
