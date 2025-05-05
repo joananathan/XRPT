@@ -397,17 +397,27 @@ input::placeholder {
 
 
 button {
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #007bff;
+  width: 65%;
+  padding: 1.5rem;
+  margin: 5% 0;
+  margin-right: 0;
+  font-size: 1.6rem;
+  letter-spacing: 0.3rem;
+  font-family: Sulphur Point;
+  border: 2px solid rgba(244, 241, 241, 0.608);
+  background-color: #99999990;
   color: white;
-  border: none;
   border-radius: 6px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
-button:hover {
-  background-color: #0056b3;
+button:hover{
+  background-color: #9191917a;
+}
+
+button:active {
+  background-color: #4a4a4a76;
 }
 
 .dropdown {
@@ -419,6 +429,7 @@ button:hover {
   font-weight: 1000;
   font-size: 1.3rem;
   letter-spacing: 0.5rem;
+  transition: 0.3s;
 }
 option {
   background-color: #5a5858ba;
