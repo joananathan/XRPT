@@ -16,13 +16,17 @@ def segment(inputfile, start_time, end_time, outputfile):
     ]
     subprocess.run(cmd)
     
-video_file = "nGIa-VL4P_4.mp4"
+video_file = "downloaded.mp4"
 
 i = 0
 for start, end in [
-    (320, 60126),  # Scene 1: Reaction video introduction, medical scenes, and sponsorship mention
-    (14400, 42998),  # Scene 2: Vasectomy discussion, privacy concerns, and humorous reactions
-    (498494, 527026)  # Scene 3: Health discussion, weight challenges, and team-building diet
+    # Scene 1: Opening Courtroom Drama – Bail Hearing Narrative
+    # This segment introduces the courtroom setting, the charges, initial exchanges about bail, and concludes with the judge denying bail—offers a mini-story with setup, tension, and resolution, around 45 seconds.
+    (240, 83010),
+
+    # Scene 2: Immunity Agreement Revelation and Fallout
+    # This segment starts with the dramatic assertion of an immunity deal, builds with the judge questioning, the confirmation by the FBI, and culminates with the judge ordering a hearing and Reddington deciding to represent himself—clear narrative arc around the scope of the agreement.
+    (113418, 278450)
 ]:
     temp_file = f"clip_{i}.mp4"
     segment(video_file, start, end, temp_file)
