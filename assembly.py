@@ -36,7 +36,7 @@ def transcribe_youtube_video(video_url: str, api_key: str) -> str:
 
     # Transcribe the downloaded audio file
     transcriber = aai.Transcriber()
-    transcript = transcriber.transcribe(f"nrbeast.mp4")
+    transcript = transcriber.transcribe(f"audiostream.mp4")
     sentences = transcript.get_sentences()
     output = []
     for sentence in sentences: 
