@@ -58,7 +58,7 @@ new fullScroll({
 });
 
 //File input handling
-const input = document.getElementById('file');
+const input = document.getElementById('video_file');
 const label = input.nextElementSibling;
 const span = label.querySelector('span');
 const labelVal = span.innerHTML;
