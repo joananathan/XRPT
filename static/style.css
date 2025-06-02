@@ -251,6 +251,7 @@ video {
   font-family: Sulphur Point;
   font-size: 3.5rem;
   letter-spacing: .3rem;
+  margin-top: 2vh;
 }
 
 @keyframes slideInFromTop {
@@ -323,6 +324,7 @@ form {
   padding: 0.3em;
   font-family: Sulphur Point;
   font-size: 1.5rem;
+  margin-top: -5vh;
 }
 
 .flash-message.success {
