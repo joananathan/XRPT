@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const arrow = document.querySelector('.scroll-arrow');
 
   arrow.addEventListener('animationend', () => {
-    arrow.style.animation = 'bounce 1.8s infinite';
+    arrow.style.animation = 'arrowbounce 1.8s infinite';
   });
 });
 
@@ -84,3 +84,11 @@ imagecontainer.dataset.selected = selectbox.value;  // ensures correct image sho
 selectbox.addEventListener("change", () => {
   imagecontainer.dataset.selected = selectbox.value;
 });
+
+
+function loading(){
+    $("#loading").show();
+    $('#loading').css('display', 'flex')
+    $("#main").hide();
+    $('body').css('overflow', 'hidden');
+}

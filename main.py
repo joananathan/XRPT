@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-import subprocess, os
+import subprocess, os, time
 from pytubefix import YouTube
+import assemblyai as aai
 
 class XRPT:
     def __init__(self):
@@ -46,10 +47,8 @@ class XRPT:
                     except Exception as e:
                         flash("Invalid YouTube link or download error.", "error")
                         return redirect(url_for('home'))
-                    
-                flash("Video processing started.", "success")
-                return redirect(url_for('home'))
-
+                time.sleep(10000)
+                
             return render_template('index.html')
 
         self.app.run(debug=True)
@@ -90,6 +89,16 @@ class XRPT:
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT)
         return float(result.stdout)
+    
+    def transcribe_youtube_video(video_url: str) -> str:
+        aai.settings.api_key = os.environ["AAI_TOKEN"]
+        transcriber = aai.Transcriber()
+        transcript = transcriber.transcribe(f"audiostream.mp4")
+        sentences = transcript.get_sentences()
+        output = []
+        for sentence in sentences: 
+            output.append(f'{sentence.text} {sentence.start}-{sentence.end}')
+        return ('\n'.join(output))
 
 if __name__ == '__main__':
     xrpt_app = XRPT()

@@ -265,7 +265,7 @@ video {
   }
 }
 
-@keyframes bounce {
+@keyframes arrowbounce {
   0%, 100% {
     opacity: 0.55;
     transform: translateX(-50%) translateY(0);
@@ -452,4 +452,129 @@ option {
 .images[data-selected="3"] img[data-image="3"],
 .images[data-selected="4"] img[data-image="4"] {
   display: block;
+}
+
+
+#loading {
+  background-color: rgba(0, 0, 0, 0.712);
+  width: 100%;
+  height: 100%;
+  display: none;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+@keyframes loaderSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.loader {
+  animation: loaderSlide 1s ease-out forwards;
+}
+
+@keyframes typing-loading {
+  0%    { content: "" }
+  3%    { content: "P" }
+  7%    { content: "Pr" }
+  12%   { content: "Pro" }
+  18%   { content: "Proc" }
+  24%   { content: "Proce" }
+  31%   { content: "Proces" }
+  39%   { content: "Process" }
+  48%   { content: "Processi" }
+  56%   { content: "Processin" }
+  64%   { content: "Processing" }
+  70%   { content: "Processing " }
+  75%   { content: "Processing v" }
+  80%   { content: "Processing vi" }
+  85%   { content: "Processing vid" }
+  89%   { content: "Processing vide" }
+  93%   { content: "Processing video" }
+  96%   { content: "Processing video." }
+  98%   { content: "Processing video.." }
+  100%  { content: "Processing video..." }
+}
+
+
+.loading-text{
+  font-size: 2vw;
+  color: #989898;
+  font-family: 'Sulphur Point';
+  --caret: white;
+  animation-delay: 3s;
+}
+
+.loading-text::before{
+  content:"";
+  animation: typing-loading 1s forwards;
+}
+
+.container {
+  background-color: #414141;
+}
+@keyframes bounce {
+  0%, 100% {
+    translate: 0px 36px;
+  }
+  50% {
+    translate: 0px 46px;
+  }
+}
+
+@keyframes bounce2 {
+  0%, 100% {
+    translate: 0px 46px;
+  }
+  50% {
+    translate: 0px 56px;
+  }
+}
+
+@keyframes grayscalePulse {
+  0% {
+    stop-color: #cccccc22;
+  }
+  50% {
+    stop-color: rgba(160, 160, 160, 0.6);
+  }
+  100% {
+    stop-color: #cccccc22;
+  }
+}
+
+@keyframes particlesFloat {
+  0%, 100% {
+    translate: 0px 18px;
+  }
+  50% {
+    translate: 0px 6px;
+  }
+}
+
+#particles {
+  animation: particlesFloat 4s ease-in-out infinite;
+}
+
+#animatedStop {
+  animation: grayscalePulse 4s infinite;
+}
+
+#bounce {
+  animation: bounce 4s ease-in-out infinite;
+  translate: 0px 36px;
+}
+
+#bounce2 {
+  animation: bounce2 4s ease-in-out infinite;
+  translate: 0px 46px;
+  animation-delay: 0.5s;
 }
