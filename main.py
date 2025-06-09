@@ -1,7 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-import subprocess, os, time
+import subprocess, os, ast
 from pytubefix import YouTube
 import assemblyai as aai
+from azure.ai.inference import ChatCompletionsClient
+from azure.ai.inference.models import SystemMessage, UserMessage
+from azure.core.credentials import AzureKeyCredential
+from pydub import AudioSegment
 
 class XRPT:
     def __init__(self):
@@ -17,7 +21,7 @@ class XRPT:
                 youtube_url = request.form.get('youtube_url')
 
                 if video_file and youtube_url:
-                    flash("Please provide only one input: either upload a file or provide a YouTube URL.", "error")
+                    flash("Please only provide one of link OR file", "error")
                     return redirect(url_for('home'))
 
                 if not video_file and not youtube_url:
@@ -34,20 +38,24 @@ class XRPT:
                     video_path = os.path.join(self.app.config['UPLOAD_FOLDER'], 'input_video.mp4')
                     video_file.save(video_path)
                     vid_length = self.get_video_length(video_path)
-                    if vid_length > 10800 or vid_length < 30:
-                        flash("Video length must be between 30 seconds to three hours.", "error")
+                    if vid_length > 2700 or vid_length < 180:
+                        flash("Video length must be between three minutes to three hours.", "error")
                         return redirect(url_for('home'))
                 else:
                     try:
                         yt = YouTube(youtube_url)
-                        if yt.length > 10800 or yt.length < 30:
-                            flash("Video length must be between 30 seconds to three hours.", "error")
+                        if yt.length > 2800 or yt.length < 180:
+                            flash("Video length must be between three minutes to three hours.", "error")
                             return redirect(url_for('home'))
                         self.download_yt(yt)
                     except Exception as e:
-                        flash("Invalid YouTube link or download error.", "error")
+                        flash("Please enter a valid link", "error")
                         return redirect(url_for('home'))
-                time.sleep(10000)
+                transcript = self.transcribe_video()
+                with open("transcript.txt", "w", encoding="utf-8") as file:
+                    file.write(transcript)
+                chosen_sections = ast.literal_eval(self.choose_sections(clip_length, num_clips, transcript))
+                print(chosen_sections)
                 
             return render_template('index.html')
 
@@ -70,17 +78,11 @@ class XRPT:
         audio_path = os.path.join(save_folder, 'audiostream.mp4')
         file = os.path.join(save_folder, 'input_video.mp4')
 
+        #I can only get the highest quality video by downloading video and audio separately (then combining them after)
         video_stream.download(output_path=save_folder, filename='videostream.mp4')
         audio_stream.download(output_path=save_folder, filename='audiostream.mp4')
 
-        subprocess.run([
-            "bin\\ffmpeg.exe",
-            "-i", video_path,
-            "-i", audio_path,
-            "-c:v", "libx264",
-            "-c:a", "aac",
-            file
-        ])
+        subprocess.run(f"ffmpeg -i {video_path} -i {audio_path} -c copy {file}")
     
     def get_video_length(self, video):
         result = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
@@ -90,15 +92,47 @@ class XRPT:
             stderr=subprocess.STDOUT)
         return float(result.stdout)
     
-    def transcribe_youtube_video(video_url: str) -> str:
+    def transcribe_video(self):
+        #Get compressed audio file only for shorter file processing
+        sound = AudioSegment.from_file("videos\\input_video.mp4")
+        sound.export("videos\\transcribe.mp3", format="mp3", bitrate="64k")
+        
         aai.settings.api_key = os.environ["AAI_TOKEN"]
         transcriber = aai.Transcriber()
-        transcript = transcriber.transcribe(f"audiostream.mp4")
+        transcript = transcriber.transcribe(f"videos\\transcribe.mp3")
         sentences = transcript.get_sentences()
+        
+        #format output
         output = []
         for sentence in sentences: 
             output.append(f'{sentence.text} {sentence.start}-{sentence.end}')
         return ('\n'.join(output))
+    
+    def choose_sections(self, clip_length, num_clips, transcript):
+        endpoint = "https://models.github.ai/inference"
+        model = "openai/gpt-4.1"
+        token = os.environ["GITHUB_TOKEN"]
+
+        with open('prompt.txt', 'r') as f:
+            prompt = f.read()
+
+        client = ChatCompletionsClient(
+            endpoint=endpoint,
+            credential=AzureKeyCredential(token),
+        )
+
+        response = client.complete(
+            messages=[
+                SystemMessage(prompt),
+                UserMessage(f"""{num_clips} clips of {clip_length} seconds
+                            {transcript}"""),
+            ],
+            temperature=1,
+            top_p=1,
+            model=model
+        )
+
+        return(response.choices[0].message.content)
 
 if __name__ == '__main__':
     xrpt_app = XRPT()

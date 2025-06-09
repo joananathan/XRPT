@@ -10,19 +10,17 @@ def segment(inputfile, start_time, end_time, outputfile):
         "-ss", str(timedelta(milliseconds=start_time)),
         "-to", str(timedelta(milliseconds=end_time)),
         "-i", inputfile,
-        "-c:v", "copy",
+        "-vf", "scale=-2:1920",
+        "-c:v", "libx264",
         "-c:a", "aac",
         outputfile
     ]
     subprocess.run(cmd)
     
-video_file = "suits.mp4"
+video_file = "videos\input_video.mp4"
 
 i = 0
-for start, end in [
-    (271560, 313000),
-    (313720, 351050),
-]:
+for start, end in [(58750, 91713),(103990, 134340)]:
     temp_file = f"clip_{i}.mp4"
     segment(video_file, start, end, temp_file)
     i += 1
