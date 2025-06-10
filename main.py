@@ -38,14 +38,14 @@ class XRPT:
                     video_path = os.path.join(self.app.config['UPLOAD_FOLDER'], 'input_video.mp4')
                     video_file.save(video_path)
                     vid_length = self.get_video_length(video_path)
-                    if vid_length > 2700 or vid_length < 180:
-                        flash("Video length must be between three minutes to three hours.", "error")
+                    if vid_length > 2700 or vid_length < 120:
+                        flash("Video length must be between 2 to 45 minutes.", "error")
                         return redirect(url_for('home'))
                 else:
                     try:
                         yt = YouTube(youtube_url)
-                        if yt.length > 2800 or yt.length < 180:
-                            flash("Video length must be between three minutes to three hours.", "error")
+                        if yt.length > 2700 or yt.length < 120:
+                            flash("Video length must be between 2 to 45 minutes.", "error")
                             return redirect(url_for('home'))
                         self.download_yt(yt)
                     except Exception as e:
@@ -56,6 +56,8 @@ class XRPT:
                     file.write(transcript)
                 chosen_sections = ast.literal_eval(self.choose_sections(clip_length, num_clips, transcript))
                 print(chosen_sections)
+                for section in chosen_sections:
+                    print(section)
                 
             return render_template('index.html')
 

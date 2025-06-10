@@ -36,10 +36,10 @@ def transcribe_youtube_video(video_url: str, api_key: str) -> str:
 
     # Transcribe the downloaded audio file
     transcriber = aai.Transcriber()
-    transcript = transcriber.transcribe(f"audiostream.mp4")
+    transcript = transcriber.transcribe(f"output_real.mp4")
     sentences = transcript.get_sentences()
     output = []
-    for sentence in sentences: 
+    for i, sentence in enumerate(sentences): 
         output.append(f'{sentence.text} {sentence.start}-{sentence.end}')
     return ('\n'.join(output))
 
