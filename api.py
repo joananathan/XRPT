@@ -1,11 +1,11 @@
-import os
+import os, ast
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
 from openai import OpenAI
 
 num_clips = 2
-clip_length = 30
+clip_length = "auto"
 with open("transcript.txt", "r") as f:
     transcript = f.read()
 
@@ -36,17 +36,21 @@ try:
     )
 
     print(response.choices[0].message.content)
+    response = response.choices[0].message.content
     
 except:
     #Else use openai's own paid api
-    client = OpenAI(api_key = os.environ.get("OPENAI_TOKEN"))
+    # client = OpenAI(api_key = os.environ.get("OPENAI_TOKEN"))
 
-    response = client.chat.completions.create(
-        model="gpt-4.1-mini",
-        messages=[
-            {"role": "system", "content": prompt},
-            {"role": "user", "content": f"""{num_clips} clips of {clip_length} seconds
-                                            {transcript}"""}]
-    )
+    # response = client.chat.completions.create(
+    #     model="gpt-4.1-mini",
+    #     messages=[
+    #         {"role": "system", "content": prompt},
+    #         {"role": "user", "content": f"""{num_clips} clips of {clip_length} seconds
+    #                                         {transcript}"""}]
+    # )
 
-    print(response.choices[0].message.content)
+    # print(response.choices[0].message.content)
+    pass
+chosen_sections = ast.literal_eval(response)
+print(chosen_sections)

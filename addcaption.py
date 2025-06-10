@@ -1,7 +1,7 @@
 import ffmpeg
 
 input_file = "utput2.mp4"
-subtitle_file = "test.srt"
+subtitle_file = "output.srt"
 output_file = "output_REALREALREAL.mp4"
 
 style = (
@@ -9,9 +9,9 @@ style = (
     f"FontSize=15,"
     "FontWeight=1000,"
     "Italic=1,"
-    "BorderStyle=1,"
+    "BorderStyle=3,"
     "PrimaryColour=&H00FFFFFF,"
-    "OutlineColour=&H00000000,"
+    "OutlineColour=&H80000000,"
     "Outline=0.3,"
     "Shadow=0,"
     "Alignment=2," 

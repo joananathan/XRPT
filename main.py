@@ -1,11 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-import subprocess, os, ast
+import subprocess, os, ast, ffmpeg
 from pytubefix import YouTube
 import assemblyai as aai
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
 from pydub import AudioSegment
+from datetime import timedelta
+from moviepy import *
+from content_aware_crop import load_yolov8_model, process_video, add_audio_to_video
 
 class XRPT:
     def __init__(self):
@@ -28,12 +31,13 @@ class XRPT:
                     flash("Please provide a video file or a YouTube URL.", "error")
                     return redirect(url_for('home'))
 
-                clip_length = int(request.form.get('clip_length', 60))
-                caption_style = request.form.get('caption_style', 'default')
-                num_clips = int(request.form.get('num_clips', 1))
+                clip_length = request.form.get('clip_length')
+                num_clips = request.form.get('num_clips')
+                caption_style = int(request.form.get('caption_style'))
+                filter_style = request.form.get('filter_adjustments')
 
                 self.clear_video_folder()
-
+                print(f"{num_clips} clips of {clip_length} seconds")
                 if video_file:
                     video_path = os.path.join(self.app.config['UPLOAD_FOLDER'], 'input_video.mp4')
                     video_file.save(video_path)
@@ -55,20 +59,22 @@ class XRPT:
                 with open("transcript.txt", "w", encoding="utf-8") as file:
                     file.write(transcript)
                 chosen_sections = ast.literal_eval(self.choose_sections(clip_length, num_clips, transcript))
-                print(chosen_sections)
-                for section in chosen_sections:
-                    print(section)
+                self.cut_video(chosen_sections)
+                self.crop_clips()
+                self.add_filter(filter_style)
+                self.caption_clip(caption_style)
                 
             return render_template('index.html')
 
         self.app.run(debug=True)
     
     def clear_video_folder(self):
-        folder = self.app.config['UPLOAD_FOLDER']
-        for filename in os.listdir(folder):
-            file_path = os.path.join(folder, filename)
-            if os.path.isfile(file_path):
-                os.remove(file_path)
+        video_folder = self.app.config['UPLOAD_FOLDER']
+        for folder in [video_folder, 'clips']:
+            for filename in os.listdir(folder):
+                file_path = os.path.join(folder, filename)
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
                 
     def download_yt(self, yt):
         save_folder = 'videos'
@@ -135,6 +141,199 @@ class XRPT:
         )
 
         return(response.choices[0].message.content)
+    
+    def cut_video(self, sections):
+        def segment(inputfile, start_time, end_time, outputfile): 
+            cmd = [
+                "bin\\ffmpeg.exe",
+                "-ss", str(timedelta(milliseconds=start_time)),
+                "-to", str(timedelta(milliseconds=end_time)),
+                "-i", inputfile,
+                "-vf", "scale=-2:1920",
+                "-c:v", "libx264",
+                "-c:a", "aac",
+                outputfile
+            ]
+            subprocess.run(cmd)
+            
+        video_file = "videos\input_video.mp4"
+        i = 1
+        for start, end in sections:
+            temp_file = f"clips\clip_{i}.mp4"
+            segment(video_file, start, end, temp_file)
+            i += 1
+            
+    def crop_clips(self):
+        folder = "clips"
+        i = 1
+        for clip in os.listdir(folder):
+            input_video_path = os.path.join(folder, clip)
+            processed_video_path = f"clips\\cropped_no_audio{i}.mp4"
+            final_output_path = f"clips\\cropped_final{i}.mp4"
+            yolo_model_path = "static\\assets\\yolov8n.pt"
+            
+            model = load_yolov8_model(yolo_model_path)
+            
+            process_video(
+                input_path=input_video_path,
+                output_path=processed_video_path,
+                model=model,
+                target_aspect_ratio=9/16,
+                smoothing_factor=0.95,
+                min_confidence=0.6
+            )
+            
+            add_audio_to_video(input_video_path, processed_video_path, final_output_path)
+            
+            i += 1
+
+            if os.path.isfile(input_video_path):
+                os.remove(input_video_path)
+                
+            os.remove(processed_video_path)
+            
+    def add_filter(self, adjustment):
+        folder = "clips"
+        i = 1
+        for clip in os.listdir(folder):
+            filepath = os.path.join(folder, clip)
+            vid = VideoFileClip(filepath)
+            if adjustment == "grain":
+                vid = vid.with_effects([vfx.Painting(1.5, 0.1)])
+            elif adjustment =="multiply":
+                vid = vid.with_effects([vfx.LumContrast(lum=90, contrast=1.3, contrast_threshold=110)])
+            elif adjustment == "flip":
+                vid = vid.with_effects([vfx.MirrorX()])
+            else:
+                os.rename(filepath, f"clips\\filtered{i}.mp4")
+                return
+            
+            vid.write_videofile(f"clips\\filtered{i}.mp4", codec="libx264")
+            if os.path.isfile(filepath):
+                os.remove(filepath)
+    
+    def caption_clip(self, caption_style):
+        def format_ms(milliseconds):
+            milliseconds = int(milliseconds)
+            seconds, ms = divmod(milliseconds, 1000)
+            minutes, seconds = divmod(seconds, 60)
+            hours, minutes = divmod(minutes, 60)
+
+            formatted = f"{hours:02}:{minutes:02}:{seconds:02},{ms:03}"
+            return(formatted)
+            
+        def write_srt(srt_file, i, text, start, end):
+            text_list = text.split()
+            
+            srt_file.write(f"{i}\n")
+            srt_file.write(f"{format_ms(start)} --> {format_ms(end)}\n")
+            
+            if len(text) > 40:
+                srt_file.write(' '.join(text_list[:int(len(text_list)/2)]))
+                srt_file.write('\n')
+                srt_file.write(' '.join(text_list[int(len(text_list)/2):]))
+            else:
+                srt_file.write(f"{text}")
+            srt_file.write("\n\n")
+
+
+        aai.settings.api_key = os.environ["AAI_TOKEN"]
+        transcriber = aai.Transcriber()
+        
+        folder = "clips"
+        i = 1
+        for clip in os.listdir(folder):
+            filepath = os.path.join(folder, clip)
+            transcript = transcriber.transcribe(filepath)
+            
+            #Format output into srt format
+            sentences = transcript.get_sentences()
+            j = 1
+            with open("output.srt", "w") as srt_file:
+                for sentence in sentences:
+                    sentence_list = sentence.text.split()
+                    if len(sentence_list) > 12:
+                        half_time = (sentence.start + sentence.end) / 2
+                        
+                        write_srt(srt_file, j, ' '.join(sentence_list[:int(len(sentence_list)/2)]), sentence.start, half_time)
+                        i+=1
+                        write_srt(srt_file, j, ' '.join(sentence_list[int(len(sentence_list)/2):]), half_time, sentence.end)
+                    
+                    else:
+                        write_srt(srt_file, j, sentence.text, sentence.start, sentence.end)
+                    
+                    j += 1
+            
+            final_output_path = f"clips\\clip_final{i}.mp4"
+            
+            if caption_style == 1:
+                style = (
+                    "FontName=Oswald,"
+                    f"FontSize=15,"
+                    "FontWeight=1000,"
+                    "Italic=0,"
+                    "BorderStyle=1,"
+                    "PrimaryColour=&H00FFFFFF,"
+                    "OutlineColour=&H00000000,"
+                    "Outline=0.3,"
+                    "Shadow=0,"
+                    "Alignment=2," 
+                    f"MarginV=100"
+                )
+            elif caption_style == 2:
+                style = (
+                    "FontName=Oswald,"
+                    f"FontSize=15,"
+                    "FontWeight=1000,"
+                    "Italic=1,"
+                    "BorderStyle=1,"
+                    "PrimaryColour=&H00FFFFFF,"
+                    "OutlineColour=&H00000000,"
+                    "Outline=0.3,"
+                    "Shadow=0,"
+                    "Alignment=2," 
+                    f"MarginV=100"
+                )
+            elif caption_style == 3:
+                style = (
+                    "FontName=Oswald,"
+                    f"FontSize=15,"
+                    "FontWeight=1000,"
+                    "Italic=0,"
+                    "BorderStyle=3,"
+                    "PrimaryColour=&H00FFFFFF,"
+                    "OutlineColour=&H80000000,"
+                    "Outline=0.3,"
+                    "Shadow=0,"
+                    "Alignment=2," 
+                    f"MarginV=100"
+                )
+            else:
+                style = (
+                    "FontName=Oswald,"
+                    f"FontSize=15,"
+                    "FontWeight=1000,"
+                    "Italic=1,"
+                    "BorderStyle=3,"
+                    "PrimaryColour=&H00FFFFFF,"
+                    "OutlineColour=&H80000000,"
+                    "Outline=0.3,"
+                    "Shadow=0,"
+                    "Alignment=2," 
+                    f"MarginV=100"
+                )
+
+            ffmpeg.input(filepath).output(
+                final_output_path,
+                vf=f"subtitles='output.srt':fontsdir=./fonts:force_style='{style}'"
+            ).run()
+            
+            if os.path.isfile(filepath):
+                os.remove(filepath)
+                    
+    
+            
+        
 
 if __name__ == '__main__':
     xrpt_app = XRPT()
