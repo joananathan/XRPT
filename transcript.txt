@@ -1,65 +1,97 @@
-Let's build an airship. 160-1800
-So this is the beginning of the platform that I want the player to be standing on. 1800-5680
-I really hope that this works. 5840-7440
-I can already tell that it won't. 7600-8920
-It should. 8920-9520
-It doesn't even fly upwards. 9760-11000
-Okay, let's start again. 11000-11920
-I honestly think at this point I might be making a happy gasp with extra steps, but I don't care because I personally think this looks really, really interesting. 11920-20000
-Ignore all of this, Obsidian. 20000-21280
-Oh, but actually, while I'm down here, I don't know how I've never thought of this. 21280-24560
-Armor stands for decoration inside of flying machines. 24720-28730
-They're entities. 28730-29450
-They don't contribute to the block push limit, but they can make really cool details to the build. 29450-34570
-These almost look structural. 34570-35890
-They look like part of the mechanism. 35890-37690
-And I think without it, it would actually look really strange. 37690-39810
-I've added more, and after a good few hours of playing around and testing various different arrangements, I think this is good to go. 39810-46610
-Oh, but now that I've got the ghasts in, I forget they fly downwards a lot. 46610-51130
-Like this looks. 51850-53460
-This doesn't look like it's being pulled up by them at all. 53460-55580
-If anything, it looks like it's being pulled down by them. 55580-57700
-I've tried a variety of everything. 57700-59380
-I even stacked a bunch of minecarts up. 59460-61420
-So it's time for the most ridiculous, most stupid idea I've ever had. 61420-65220
-Sometimes very good things come out of bad situations. 65300-68420
-Who needs happy ghasts when you have levitating polar bears? 68740-73060
-It actually looks pretty good. 75780-77140
-It actually looks pretty good. 78020-79100
-It doesn't look very chaotic. 79100-80300
-They look. 80300-80740
-They look inflatable. 81680-82840
-They look very buoyant. 82840-84160
-And as you can see, the system works. 84160-88160
-So here we go. 92240-93200
-There is our airship heading off into the sky. 93920-97920
-This is so stupid. 98800-100080
-This is. 100960-101400
-This is. 101400-101840
-It's not lost on me how ridiculously stupid this is. 101840-104280
-Right? 104280-104520
-I haven't actually tried out this. 104520-105720
-This part, but no, we've. 105720-107450
-We've managed to get by completely unscathed. 107450-110010
-Everything has worked properly. 110010-111610
-I gotta be honest, I was expecting so much more death. 111610-113570
-So that's good. 113570-114210
-It's made it up to the top station. 114210-116410
-Now let's see if we can send it back down to the ground. 116730-119690
-Nice. 122170-122650
-There we go. 123690-124490
-Our airship is descending. 125210-127050
-Oh, no, we lost some. 127210-129610
-Oh. 130650-131130
-Oh, that's. 131530-132330
-Oh, that's. 132650-133530
-Ah, there's something deeply upsetting about that. 134280-137800
-But regardless of those guys entering the Polar Bear space program, most of the others have made it down to the bottom safely, and this thing has returned back to its bottom station. 138360-152440
-This is. 152600-153480
-This is fantastic, isn't it? 153640-154800
-But alas, of course, it's not possible. 154800-156880
-In surviving Minecraft, there's no levitation potions. 156880-159280
-I had to do a little bit of trickery to get this situation to occur. 159280-162640
-This leads me to making a small suggestion to the Mojang devs, which is, when a happy ghast is tethered to something, it'd be really nice if it tried to travel upwards. 162640-171940
-I think for builders and for animated Minecraft structures, it'll be nice to have something that reliably wants to go up. 172020-178820
-That way we can make things like animated balloons, long vertical daisy chains and all sorts of bits and bobs. 178900-184140
+Samsung is working on a transparent phone and you might be thinking, I feel like I've heard this news somewhere before. 160-6160
+Well that's because they started registering patents for it seven years ago. 6480-10560
+They've registered more patents in 2018 and then again literally a couple of weeks ago. 10560-14880
+All of this points towards one thing that we don't know when it's coming. 14960-18160
+We actually don't even know if it's coming. 18160-19920
+But we do know that behind the walls of Samsung HQ this is being worked on now. 19920-25120
+As someone who's grown up watching a lot of sci fi where it's practically a stereotype of the future to have transparent displays and transparent ph, it is crazy to me that this isn't fiction anymore. 25120-35580
+Literally last month Xiaomi announced a transparent tv. 35660-38780
+You can go into their store, demo it, you could take one home if you like it. 38780-41980
+It is a real product, a device that can display a vibrant OLED picture and then when it's off, just disappear into a razor thin sheet of glass. 41980-50220
+I mean I say that, but I'll be the first to admit that this particular usage case is not a smart idea. 50300-55740
+I think a living room TV system is probably one of the top five worst use cases of of a transparent display. 55820-62100
+Because you generally sit a TV in one spot and then never really move it. 62100-65780
+You're not going to notice the transparency unless you get up and walk around it. 65780-69380
+And because it's probably sitting in your living room, chances are all it's going to do is remind you what the back of your wall looks like and potentially even remind you of that spaghetti of cables you had behind your screen. 69460-80260
+Plus, the recommended usage scenario for transparent TVs right now is making sure the wall behind is dark. 80340-85860
+But think about that for a second. 85940-87510
+If the wall behind your TV is dark, it might as well not be a transparent TV. 87510-91670
+Now. 91670-91950
+It actually would make sense if it was like a fitted panel, something that people could install in a place where they were going to have glass anyways. 91950-97830
+But it just so happens that that glass is also their tv. 97830-100630
+But anyways, yeah, I'm not hugely sold on that idea. 100710-103350
+And to be really fair, in all of these sci fi movies, as prevalent as these see through displays and see through phones are, there's never really an explanation as to why. 103350-111350
+I feel like a lot of people are convinced that this is is the future, but often just because, well, it's futuristic but that in itself is just a self fulfilling prophecy. 111430-121400
+Yes, it's a screen protector. 121640-123560
+I'm going to roll with it. 124120-125160
+So is A transparent smartphone any better? 125240-127720
+I would argue yes. 128600-129960
+And I do think it's possible. 130360-132280
+The idea would basically be to have a transparent display and then all your transparent components sitting directly behind it, and then all the things that you couldn't make transparent shove them into the bezels. 132520-142490
+And I get that this sounds like science fiction, but we are getting there. 142490-145610
+Transparent circuit boards are a thing. 145610-147370
+Transparent cables are a thing. 147370-148970
+Even transparent batteries are starting to become a thing. 149130-152170
+So, yes, whilst a fully transparent phone is going to take time, I'm just saying that I think it's plausible. 152330-157529
+So why would you want one? 157850-159210
+Oh, and if you're enjoying this video, by the way, a sub to the channel would be miraculous. 159290-165210
+Now, there is already the very obvious perk of transparent is cool. 165610-169250
+And if you gave me a couple of hours, I could probably name you 100 products that are found in on this premise alone. 169250-174190
+But to be fair, I think with transparent phones there is more to it than that. 174190-177350
+There's a minor safety benefit. 177430-179190
+People walk around the street staring at their phones. 179190-181110
+You could argue that if your phone is transparent, you'll at least have some awareness as to what's happening around you. 181110-185910
+But also, if we just take a closer look at the patent Samsung's been filing, some of them detail a display that can, because it's transparent, be used on both the front and the back. 186070-195110
+It might mean that you could use your phone normally without obstructing your view with a finger. 195350-199190
+It might mean you could effectively pinch objects. 199190-201430
+You'd almost have another dimension when interacting with digital content. 201430-204390
+This device right here, for example, was something created by Japanese mobile operator docomo, where you could, for example, use one hand on the back to hold a Rubik's Cube still and another to rotate parts of it like you would in real life. 205010-216530
+And just bear in mind that that demo was from 2012. 216690-219490
+There is the obvious problem with a transparent device, that whatever's happening right behind you might interfere with what you're trying to see. 219730-225970
+But we already know that this is a solvable problem, because glass can tint itself. 226050-230610
+Transparent display. 231000-231880
+Glass can adjust its transparency on the fly. 231880-234360
+You've seen that OnePlus concept, one phone, right? 234440-236720
+It actually employed this exact technique, darkening its glass to make its cameras disappear from view. 236720-241720
+But all this stuff is fairly minor. 241880-243560
+I think the big selling point of a transparent phone is augmented reality. 243560-247400
+See, even now, we can play games like Pokemon Go with these virtual creatures running around in our real world, we can scan text in a foreign language and convert it to our own. 247560-255480
+We can measure the distance of real world objects, but in the current way that this is done, there's a disconnect between you and the real world that you're interacting with. 255480-263810
+What you're actually seeing is not really what's in front of you. 263810-266330
+It's just a representation of what's in front of you shown on a screen, which in itself is just information displayed by the camera of your phone. 266330-273849
+It doesn't feel real. 273849-274930
+It doesn't feel like your reality is actually getting augmented. 274930-278130
+But with a transparent phone, you can bypass all of that. 278210-281650
+Imagine literally just holding up this digital pane of glass and seeing those objects alive right in front of you. 281730-287360
+It would be the next level of immersion. 287360-290320
+All that said, I don't think transparent phones are going to become a thing. 290960-294640
+See, two of the biggest, most persistent trends in technology are that A, people want to be as connected as possible. 294800-301600
+Always online, always just one interaction away from other people, and B, at the same time, more than ever, people want immersion. 301920-309120
+A way to lose themselves in digital worlds that feel as real as possible. 309120-312480
+That's why people love VR so much. 312830-314350
+But where do these two things lead us? 314510-316910
+Because then they almost kind of seem like contradictions. 316910-319630
+Like, how can you be always connected and always interacting with other people if at the same time you're sunk into a digital experience? 319630-326190
+Well, I would argue that it all leads us to a mixed reality, a world where digital becomes fused with the physical. 326910-333390
+You are completely immersed, but at the same time, so is everyone else. 333390-337310
+So you're always connected. 337550-338990
+And there are huge benefits to this. 339150-340750
+You wouldn't need road signs to know where you're driving. 340750-342710
+You wouldn't need great weather to be able to look out the window and see a bright sunny day. 342710-346450
+You'll be able to learn everything you need about an item in a shop before you actually pay for it. 346450-350410
+And most importantly, Pokemon Go could actually be what it was in the initial trailer. 350650-355050
+With people wandering around their real world, catching seemingly real Pokemon. 355050-359690
+That's a dream. 359850-360730
+And I do get that at the same time, this sounds just as terrifying as it is exciting. 360810-365050
+So if you do want a full video, kind of delving into the meat of it, let me know. 365290-368570
+But what I think is that by the time we see this in real, products that you can actually go out and buy will be ready for it and people will want it. 368570-376410
+So with all that in mind, yes, a transparent smartphone would be a step above a normal phone in immersing you into this digital world. 376570-383690
+But there's a competing product that would be two steps above augmented reality glasses. 383930-390090
+If the real world is merging with the virtual, then it makes complete sense for you to be able to access this through something you can wear, as opposed to something you have to hold. 390170-397850
+Instead of having to install a transparent display in my car, 15 in my house, and then 100 in my shop, it makes sense to just have one transparent display that can do everything, and it makes sense for that display to not be on a smartphone, but to be on your face. 398090-413020
+Plus, by the time a transparent phone is completely viable, I think we'll already be on our third generation of AR glasses, so I don't think they'll even be given enough time to become a thing. 413180-422300
+I suppose the next step above glasses would be something implanted inside of you so that you could still interact with the digital world. 422300-427420
+That is definitely a different video. 428200-429560
+So if you enjoyed this one, do consider subscribing really be appreciated. 429880-433480
+My name is Aaron, this is Mr. 433560-435080
+Who's the Boss and I'll catch you in the next one. 435080-437400

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="static\results.css">
+</head>
+<body>
+    <h1>Your Clips Are Ready</h1>
+    
+    <a href="clips.zip" download>
+        <button class='download'>Download</button>
+    </a>
+
+    <form action="{{ url_for('home') }}" method="get">
+        <button class='back' type="submit">Back to Home</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Sulphur+Point:wght@300;400;700&display=swap');
+body {
+    background-image: url("assets\\background.png");
+    background-color: rgba(0, 0, 0, 0.71);
+    background-blend-mode: multiply;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+    align-items: center;
+    justify-items: center;
+}
+h1 {
+    font-family: Sulphur Point;
+    font-size: 8vh;
+    color: white;
+}
+.download {
+    padding: 3vh 7vw;
+    font-size: 3vh;
+    background-color: #464646;
+    font-family: Sulphur Point;
+    color: rgba(255, 255, 255, 0.674);
+    border: 2px solid rgb(122, 122, 122);
+    border-radius: 5px;
+    cursor: pointer;
+}
+.download:hover {
+    background-color: #4646468a;
+}   
+.download:active{
+    background-color: #787878;
+}
+
+.back {
+    margin-top: 3vh;
+    font-family: Sulphur Point;
+    background: none;
+    border: none;
+    color: rgb(208, 208, 208);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 2.5vh;
+    padding: 0;
+}
+
+.back:active{
+    color: rgba(208, 208, 208, 0.701);
+}

@@ -1,6 +1,6 @@
 import ffmpeg
 
-input_file = "utput2.mp4"
+input_file = "clips\output.mp4"
 subtitle_file = "output.srt"
 output_file = "output_REALREALREAL.mp4"
 

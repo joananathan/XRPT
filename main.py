@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-import subprocess, os, ast, ffmpeg
+import subprocess, os, ast, ffmpeg, shutil
 from pytubefix import YouTube
 import assemblyai as aai
 from azure.ai.inference import ChatCompletionsClient
@@ -42,14 +42,14 @@ class XRPT:
                     video_path = os.path.join(self.app.config['UPLOAD_FOLDER'], 'input_video.mp4')
                     video_file.save(video_path)
                     vid_length = self.get_video_length(video_path)
-                    if vid_length > 2700 or vid_length < 120:
-                        flash("Video length must be between 2 to 45 minutes.", "error")
+                    if vid_length > 2700 or vid_length < 300:
+                        flash("Video length must be between 5 to 45 minutes.", "error")
                         return redirect(url_for('home'))
                 else:
                     try:
                         yt = YouTube(youtube_url)
-                        if yt.length > 2700 or yt.length < 120:
-                            flash("Video length must be between 2 to 45 minutes.", "error")
+                        if yt.length > 2700 or yt.length < 300:
+                            flash("Video length must be between 5 to 45 minutes.", "error")
                             return redirect(url_for('home'))
                         self.download_yt(yt)
                     except Exception as e:
@@ -64,17 +64,20 @@ class XRPT:
                 self.add_filter(filter_style)
                 self.caption_clip(caption_style)
                 
+                shutil.make_archive('clips', 'zip', 'videos\\final')
+                
+                return render_template('results.html')
+                
             return render_template('index.html')
 
         self.app.run(debug=True)
     
     def clear_video_folder(self):
-        video_folder = self.app.config['UPLOAD_FOLDER']
-        for folder in [video_folder, 'clips']:
-            for filename in os.listdir(folder):
-                file_path = os.path.join(folder, filename)
-                if os.path.isfile(file_path):
-                    os.remove(file_path)
+        folder = self.app.config['UPLOAD_FOLDER']
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
                 
     def download_yt(self, yt):
         save_folder = 'videos'
@@ -155,21 +158,23 @@ class XRPT:
                 outputfile
             ]
             subprocess.run(cmd)
-            
+        
+        
+        
         video_file = "videos\input_video.mp4"
         i = 1
         for start, end in sections:
-            temp_file = f"clips\clip_{i}.mp4"
+            temp_file = f"videos\\trimmed\\clip_{i}.mp4"
             segment(video_file, start, end, temp_file)
             i += 1
             
     def crop_clips(self):
-        folder = "clips"
+        folder = "videos\\trimmed"
         i = 1
         for clip in os.listdir(folder):
             input_video_path = os.path.join(folder, clip)
-            processed_video_path = f"clips\\cropped_no_audio{i}.mp4"
-            final_output_path = f"clips\\cropped_final{i}.mp4"
+            processed_video_path = f"videos\\cropped\\clip_{i}_noaudio.mp4"
+            final_output_path = f"videos\\cropped\\clip_{i}.mp4"
             yolo_model_path = "static\\assets\\yolov8n.pt"
             
             model = load_yolov8_model(yolo_model_path)
@@ -186,14 +191,11 @@ class XRPT:
             add_audio_to_video(input_video_path, processed_video_path, final_output_path)
             
             i += 1
-
-            if os.path.isfile(input_video_path):
-                os.remove(input_video_path)
                 
             os.remove(processed_video_path)
             
     def add_filter(self, adjustment):
-        folder = "clips"
+        folder = "videos\\cropped"
         i = 1
         for clip in os.listdir(folder):
             filepath = os.path.join(folder, clip)
@@ -205,12 +207,12 @@ class XRPT:
             elif adjustment == "flip":
                 vid = vid.with_effects([vfx.MirrorX()])
             else:
-                os.rename(filepath, f"clips\\filtered{i}.mp4")
+                os.rename(filepath, f"videos\\filtered\\clip_{i}.mp4")
                 return
             
-            vid.write_videofile(f"clips\\filtered{i}.mp4", codec="libx264")
-            if os.path.isfile(filepath):
-                os.remove(filepath)
+            vid.write_videofile(f"videos\\filtered\\clip_{i}.mp4", codec="libx264")
+            
+            i += 1
     
     def caption_clip(self, caption_style):
         def format_ms(milliseconds):
@@ -240,14 +242,16 @@ class XRPT:
         aai.settings.api_key = os.environ["AAI_TOKEN"]
         transcriber = aai.Transcriber()
         
-        folder = "clips"
+        folder = "videos\\filtered"
         i = 1
         for clip in os.listdir(folder):
             filepath = os.path.join(folder, clip)
+            print(filepath)
             transcript = transcriber.transcribe(filepath)
-            
+
             #Format output into srt format
             sentences = transcript.get_sentences()
+            print("sentences done")
             j = 1
             with open("output.srt", "w") as srt_file:
                 for sentence in sentences:
@@ -264,8 +268,8 @@ class XRPT:
                     
                     j += 1
             
-            final_output_path = f"clips\\clip_final{i}.mp4"
-            
+            final_output_path = f"videos\\final\\clip_{i}.mp4"
+
             if caption_style == 1:
                 style = (
                     "FontName=Oswald,"
@@ -323,16 +327,14 @@ class XRPT:
                     f"MarginV=100"
                 )
 
+            print(style)
+            
             ffmpeg.input(filepath).output(
                 final_output_path,
                 vf=f"subtitles='output.srt':fontsdir=./fonts:force_style='{style}'"
             ).run()
-            
-            if os.path.isfile(filepath):
-                os.remove(filepath)
-                    
-    
-            
+
+            i += 1
         
 
 if __name__ == '__main__':
