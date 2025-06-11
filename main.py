@@ -9,6 +9,7 @@ from pydub import AudioSegment
 from datetime import timedelta
 from moviepy import *
 from content_aware_crop import load_yolov8_model, process_video, add_audio_to_video
+from openai import OpenAI
 
 class XRPT:
     def __init__(self):
@@ -55,16 +56,19 @@ class XRPT:
                     except Exception as e:
                         flash("Please enter a valid link", "error")
                         return redirect(url_for('home'))
-                transcript = self.transcribe_video()
-                with open("transcript.txt", "w", encoding="utf-8") as file:
-                    file.write(transcript)
+                try:
+                    transcript = self.transcribe_video()
+                except ValueError:
+                    flash("Video does not enough speech to determine best clips", "error")
+                    return redirect(url_for('home'))
+                
                 chosen_sections = ast.literal_eval(self.choose_sections(clip_length, num_clips, transcript))
                 self.cut_video(chosen_sections)
                 self.crop_clips()
                 self.add_filter(filter_style)
                 self.caption_clip(caption_style)
                 
-                shutil.make_archive('clips', 'zip', 'videos\\final')
+                shutil.make_archive('static\\clips', 'zip', 'videos\\final')
                 
                 return render_template('results.html')
                 
@@ -74,9 +78,9 @@ class XRPT:
     
     def clear_video_folder(self):
         folder = self.app.config['UPLOAD_FOLDER']
-        for filename in os.listdir(folder):
-            file_path = os.path.join(folder, filename)
-            if os.path.isfile(file_path):
+        for root, dirs, files in os.walk(folder):
+            for file in files:
+                file_path = os.path.join(root, file)
                 os.remove(file_path)
                 
     def download_yt(self, yt):
@@ -93,7 +97,7 @@ class XRPT:
         video_stream.download(output_path=save_folder, filename='videostream.mp4')
         audio_stream.download(output_path=save_folder, filename='audiostream.mp4')
 
-        subprocess.run(f"ffmpeg -i {video_path} -i {audio_path} -c copy {file}")
+        subprocess.run(fr"bin\\ffmpeg.exe -i {video_path} -i {audio_path} -c copy {file}")
     
     def get_video_length(self, video):
         result = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
@@ -127,21 +131,35 @@ class XRPT:
         with open('prompt.txt', 'r') as f:
             prompt = f.read()
 
-        client = ChatCompletionsClient(
-            endpoint=endpoint,
-            credential=AzureKeyCredential(token),
-        )
+        try:
+            #Test if free Azure hosted API works (if below 8000 token limit)
+            client = ChatCompletionsClient(
+                endpoint=endpoint,
+                credential=AzureKeyCredential(token),
+            )
 
-        response = client.complete(
-            messages=[
-                SystemMessage(prompt),
-                UserMessage(f"""{num_clips} clips of {clip_length} seconds
-                            {transcript}"""),
-            ],
-            temperature=1,
-            top_p=1,
-            model=model
-        )
+            response = client.complete(
+                messages=[
+                    SystemMessage(prompt),
+                    UserMessage(f"""{num_clips} clips of {clip_length} seconds
+                                {transcript}"""),
+                ],
+                temperature=1,
+                top_p=1,
+                model=model
+            )
+            
+        except:
+            #Else use openai's own paid API
+            client = OpenAI(api_key = os.environ.get("OPENAI_TOKEN"))
+
+            response = client.chat.completions.create(
+                model="gpt-4.1-mini",
+                messages=[
+                    {"role": "system", "content": prompt},
+                    {"role": "user", "content": f"""{num_clips} clips of {clip_length} seconds
+                                                    {transcript}"""}]
+            )
 
         return(response.choices[0].message.content)
     
@@ -159,19 +177,19 @@ class XRPT:
             ]
             subprocess.run(cmd)
         
-        
-        
-        video_file = "videos\input_video.mp4"
-        i = 1
-        for start, end in sections:
+
+        os.makedirs("videos\\trimmed", exist_ok=True)
+    
+        video_file = "videos\\input_video.mp4"
+        for i, (start, end) in enumerate(sections, start=1):
             temp_file = f"videos\\trimmed\\clip_{i}.mp4"
             segment(video_file, start, end, temp_file)
-            i += 1
             
     def crop_clips(self):
+        os.makedirs("videos\\cropped", exist_ok=True)
         folder = "videos\\trimmed"
-        i = 1
-        for clip in os.listdir(folder):
+        clips = sorted(os.listdir(folder))
+        for i, clip in enumerate(clips, start=1):
             input_video_path = os.path.join(folder, clip)
             processed_video_path = f"videos\\cropped\\clip_{i}_noaudio.mp4"
             final_output_path = f"videos\\cropped\\clip_{i}.mp4"
@@ -189,31 +207,29 @@ class XRPT:
             )
             
             add_audio_to_video(input_video_path, processed_video_path, final_output_path)
-            
-            i += 1
                 
             os.remove(processed_video_path)
             
     def add_filter(self, adjustment):
+        os.makedirs("videos\\filtered", exist_ok=True)
         folder = "videos\\cropped"
-        i = 1
-        for clip in os.listdir(folder):
+        clips = sorted([f for f in os.listdir(folder) if not f.endswith('_noaudio.mp4')])
+        for i, clip in enumerate(clips, start = 1):
             filepath = os.path.join(folder, clip)
-            vid = VideoFileClip(filepath)
-            if adjustment == "grain":
-                vid = vid.with_effects([vfx.Painting(1.5, 0.1)])
-            elif adjustment =="multiply":
-                vid = vid.with_effects([vfx.LumContrast(lum=90, contrast=1.3, contrast_threshold=110)])
-            elif adjustment == "flip":
-                vid = vid.with_effects([vfx.MirrorX()])
+            if adjustment in ["grain", "multiply", "flip"]:
+                vid = VideoFileClip(filepath)
+                if adjustment == "grain":
+                    vid = vid.with_effects([vfx.Painting(1.5, 0.1)])
+                elif adjustment == "multiply":
+                    vid = vid.with_effects([vfx.LumContrast(lum=90, contrast=1.3, contrast_threshold=110)])
+                elif adjustment == "flip":
+                    vid = vid.with_effects([vfx.MirrorX()])
+                
+                vid.write_videofile(f"videos\\filtered\\clip_{i}.mp4", codec="libx264")
+                vid.close()
             else:
                 os.rename(filepath, f"videos\\filtered\\clip_{i}.mp4")
-                return
-            
-            vid.write_videofile(f"videos\\filtered\\clip_{i}.mp4", codec="libx264")
-            
-            i += 1
-    
+              
     def caption_clip(self, caption_style):
         def format_ms(milliseconds):
             milliseconds = int(milliseconds)
@@ -242,16 +258,16 @@ class XRPT:
         aai.settings.api_key = os.environ["AAI_TOKEN"]
         transcriber = aai.Transcriber()
         
+        os.makedirs("videos\\final", exist_ok=True)
         folder = "videos\\filtered"
-        i = 1
-        for clip in os.listdir(folder):
+        clips = sorted(os.listdir(folder))
+            
+        for i, clip in enumerate(clips, start=1):
             filepath = os.path.join(folder, clip)
-            print(filepath)
             transcript = transcriber.transcribe(filepath)
 
             #Format output into srt format
             sentences = transcript.get_sentences()
-            print("sentences done")
             j = 1
             with open("output.srt", "w") as srt_file:
                 for sentence in sentences:
@@ -260,7 +276,7 @@ class XRPT:
                         half_time = (sentence.start + sentence.end) / 2
                         
                         write_srt(srt_file, j, ' '.join(sentence_list[:int(len(sentence_list)/2)]), sentence.start, half_time)
-                        i+=1
+                        j+=1
                         write_srt(srt_file, j, ' '.join(sentence_list[int(len(sentence_list)/2):]), half_time, sentence.end)
                     
                     else:
@@ -333,8 +349,6 @@ class XRPT:
                 final_output_path,
                 vf=f"subtitles='output.srt':fontsdir=./fonts:force_style='{style}'"
             ).run()
-
-            i += 1
         
 
 if __name__ == '__main__':

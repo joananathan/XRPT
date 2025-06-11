@@ -6,7 +6,7 @@
 <body>
     <h1>Your Clips Are Ready</h1>
     
-    <a href="clips.zip" download>
+    <a href="{{ url_for('static', filename='clips.zip') }}" download>
         <button class='download'>Download</button>
     </a>
 
