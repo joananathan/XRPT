@@ -2,6 +2,8 @@ import cv2
 import subprocess
 from ultralytics import YOLO
 
+#DISCLAIMER: Not my code, but rather based on https://github.com/MrShivam-Pal/Content-Aware-Video-Cropping
+
 def load_yolov8_model(model_path):
     """Load the YOLOv8 model."""
     model = YOLO(model_path)

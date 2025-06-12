@@ -5,7 +5,6 @@ import assemblyai as aai
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
-from pydub import AudioSegment
 from datetime import timedelta
 from moviepy import *
 from content_aware_crop import load_yolov8_model, process_video, add_audio_to_video
@@ -13,6 +12,7 @@ from openai import OpenAI
 
 class XRPT:
     def __init__(self):
+        os.makedirs("videos", exist_ok=True)
         self.app = Flask(__name__)
         self.app.config['SECRET_KEY'] = 'secretkey'
         self.app.config['UPLOAD_FOLDER'] = 'videos'
@@ -24,6 +24,7 @@ class XRPT:
                 video_file = request.files.get('video_file')
                 youtube_url = request.form.get('youtube_url')
 
+                #INPUT VALIDATION
                 if video_file and youtube_url:
                     flash("Please only provide one of link OR file", "error")
                     return redirect(url_for('home'))
@@ -38,7 +39,8 @@ class XRPT:
                 filter_style = request.form.get('filter_adjustments')
 
                 self.clear_video_folder()
-                print(f"{num_clips} clips of {clip_length} seconds")
+                
+                #More input validation based on video file or youtube link. Check video length.
                 if video_file:
                     video_path = os.path.join(self.app.config['UPLOAD_FOLDER'], 'input_video.mp4')
                     video_file.save(video_path)
@@ -54,14 +56,16 @@ class XRPT:
                             return redirect(url_for('home'))
                         self.download_yt(yt)
                     except Exception as e:
+                        print(e)
                         flash("Please enter a valid link", "error")
                         return redirect(url_for('home'))
                 try:
                     transcript = self.transcribe_video()
-                except ValueError:
-                    flash("Video does not enough speech to determine best clips", "error")
+                except RuntimeError:
+                    flash("Video does not have enough speech to be analysed", "error")
                     return redirect(url_for('home'))
                 
+                #Call all the video processing functions
                 chosen_sections = ast.literal_eval(self.choose_sections(clip_length, num_clips, transcript))
                 self.cut_video(chosen_sections)
                 self.crop_clips()
@@ -84,7 +88,7 @@ class XRPT:
                 os.remove(file_path)
                 
     def download_yt(self, yt):
-        save_folder = 'videos'
+        save_folder = self.app.config['UPLOAD_FOLDER']
 
         video_stream = yt.streams.filter(adaptive=True, file_extension='mp4', only_video=True).order_by('resolution').desc().first()
         audio_stream = yt.streams.filter(adaptive=True, file_extension='mp4', only_audio=True).order_by('abr').desc().first()
@@ -100,7 +104,7 @@ class XRPT:
         subprocess.run(fr"bin\\ffmpeg.exe -i {video_path} -i {audio_path} -c copy {file}")
     
     def get_video_length(self, video):
-        result = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
+        result = subprocess.run(["bin\\ffprobe.exe", "-v", "error", "-show_entries",
                                 "format=duration", "-of",
                                 "default=noprint_wrappers=1:nokey=1", video],
             stdout=subprocess.PIPE,
@@ -108,14 +112,12 @@ class XRPT:
         return float(result.stdout)
     
     def transcribe_video(self):
-        #Get compressed audio file only for shorter file processing
-        sound = AudioSegment.from_file("videos\\input_video.mp4")
-        sound.export("videos\\transcribe.mp3", format="mp3", bitrate="64k")
-        
         aai.settings.api_key = os.environ["AAI_TOKEN"]
         transcriber = aai.Transcriber()
-        transcript = transcriber.transcribe(f"videos\\transcribe.mp3")
+        transcript = transcriber.transcribe(f"videos\\input_video.mp4")
         sentences = transcript.get_sentences()
+        if len(sentences) < 30: #Ensure video has enough speech to analyse
+            raise RuntimeError
         
         #format output
         output = []
@@ -154,7 +156,7 @@ class XRPT:
             client = OpenAI(api_key = os.environ.get("OPENAI_TOKEN"))
 
             response = client.chat.completions.create(
-                model="gpt-4.1-mini",
+                model="gpt-4.1",
                 messages=[
                     {"role": "system", "content": prompt},
                     {"role": "user", "content": f"""{num_clips} clips of {clip_length} seconds
@@ -162,6 +164,7 @@ class XRPT:
             )
 
         return(response.choices[0].message.content)
+    
     
     def cut_video(self, sections):
         def segment(inputfile, start_time, end_time, outputfile): 
@@ -213,7 +216,10 @@ class XRPT:
     def add_filter(self, adjustment):
         os.makedirs("videos\\filtered", exist_ok=True)
         folder = "videos\\cropped"
+        
+        #ignore the temp videos otherwise leads to numbering problems
         clips = sorted([f for f in os.listdir(folder) if not f.endswith('_noaudio.mp4')])
+        
         for i, clip in enumerate(clips, start = 1):
             filepath = os.path.join(folder, clip)
             if adjustment in ["grain", "multiply", "flip"]:
@@ -231,6 +237,7 @@ class XRPT:
                 os.rename(filepath, f"videos\\filtered\\clip_{i}.mp4")
               
     def caption_clip(self, caption_style):
+        #milliseconds to HH:MM:SS,mmm format
         def format_ms(milliseconds):
             milliseconds = int(milliseconds)
             seconds, ms = divmod(milliseconds, 1000)
@@ -239,7 +246,7 @@ class XRPT:
 
             formatted = f"{hours:02}:{minutes:02}:{seconds:02},{ms:03}"
             return(formatted)
-            
+        
         def write_srt(srt_file, i, text, start, end):
             text_list = text.split()
             
@@ -262,6 +269,7 @@ class XRPT:
         folder = "videos\\filtered"
         clips = sorted(os.listdir(folder))
             
+        #transcribe each clip again to subtitle them
         for i, clip in enumerate(clips, start=1):
             filepath = os.path.join(folder, clip)
             transcript = transcriber.transcribe(filepath)
