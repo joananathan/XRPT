@@ -59,7 +59,7 @@ class XRPT:
                 try:
                     transcript = self.transcribe_video()
                 except ValueError:
-                    flash("Video does not enough speech to determine best clips", "error")
+                    flash("Video does not have enough speech to be analysed", "error")
                     return redirect(url_for('home'))
                 
                 chosen_sections = ast.literal_eval(self.choose_sections(clip_length, num_clips, transcript))
@@ -116,6 +116,8 @@ class XRPT:
         transcriber = aai.Transcriber()
         transcript = transcriber.transcribe(f"videos\\transcribe.mp3")
         sentences = transcript.get_sentences()
+        if len(sentences) < 30: #Ensure video has enough speech to analyse
+            raise ValueError
         
         #format output
         output = []
